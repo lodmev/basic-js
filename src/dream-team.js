@@ -17,15 +17,25 @@ function createDreamTeam(members) {
   if (!(members instanceof Array)) {
     return false;
   }
-  let res = '';
+  let res = [];
+  for (const member of members) {
+    parseName(member)
+  }
   /* 
    * @param {String}
    */ 
   function parseName(name) {
-    if (!(name typeof 'string')) {
-      return '';
+    if (typeof name  !== 'string') {
+      return;
     }
+    res.push(name.toUpperCase().trim().slice(0, 1))
+    /*
+    for (n of name.toUpperCase().split(' ')) {
+      res.push(n.slice(0,1));
+    }
+    */
   }
+  return res.sort().join('');
 }
 
 module.exports = {
