@@ -45,6 +45,13 @@ class VigenereCipheringMachine {
     }
     const sDecoder = symbolDecoder(key.toUpperCase());
     let res = [];
+    for (const symbol of str.toUpperCase()) {
+      res.push(sDecoder(symbol));
+    }
+    if (!this.direct) {
+      res = res.reverse();
+    }
+    return res.join('');
   }
 }
 
@@ -58,6 +65,23 @@ function symbolEncoder(key) {
     const keyCode = key[counter % key.length].codePointAt();
     counter += 1;
     return String.fromCodePoint(((code + keyCode) % 26) + A_CODE);
+  };
+}
+
+function symbolDecoder(key) {
+  let counter = 0;
+  return function (symbol) {
+    const code = symbol.codePointAt();
+    if (code < A_CODE || code > Z_CODE) {
+      return symbol;
+    }
+    const keyCode = key[counter % key.length].codePointAt();
+    counter += 1;
+    const difference = code - keyCode;
+    if (difference < 0) {
+      return String.fromCodePoint(26 + difference + A_CODE);
+    }
+    return String.fromCodePoint((difference % 26) + A_CODE);
   };
 }
 
